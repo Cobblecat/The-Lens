@@ -24,24 +24,6 @@ Lens is a contextual gameplay intelligence system rather than a generic chat ove
 
 The current runtime is deliberately controlled by the player. Lens does not take periodic screenshots or initiate hidden background conversations. Every active request begins with an explicit player action.
 
-## An independent Special Agent
-
-The primary Lens route is not a macro wrapped around a desktop chat. It is a self contained application pipeline that owns the Special Agent's session, request queue, evidence, tools, and reply delivery.
-
-At launch, Lens starts a private backend process and creates one ephemeral agent session for that run. The selected model, reasoning level, instruction set, tool definitions, and application build identity are fixed for the session. Typed questions, deliberate screenshots, and accepted speech transcripts enter one FIFO request stream, preserving the exact association between words, images, tool activity, and replies.
-
-The backend is designed around strong ownership and failure boundaries:
-
-- One Lens process owns the active queue and agent session.
-- Intentional requests reserve their position before image capture or transcription completes.
-- Each turn is matched to its exact session and request identity.
-- Uncertain submissions are held for review instead of being resent automatically.
-- Canceled work cannot be revived by a late callback.
-- Complete responses are saved before the overlay publishes them.
-- Restarting Lens creates a new session and never replays an old queue.
-
-This architecture keeps normal interaction inside the game experience. It does not require selecting, activating, or routing each request through a separate desktop conversation.
-
 ## The Hyrule intelligence library
 
 The information system behind the Special Agent is one of Sheikah Lens's defining technical achievements: a comprehensive, proprietary AI retrieval library engineered specifically for *Breath of the Wild*. It transforms an enormous body of game knowledge and campaign evidence into a governed intelligence system the agent can query with record level precision.
@@ -75,6 +57,12 @@ The knowledge system separates three complementary layers:
 
 Inspectable current evidence and direct player statements outrank stored state. Missing information remains unknown rather than being guessed. Strategy is derived at answer time and is never misrepresented as a database fact.
 
+## Request flow
+
+![The Lens data flow](https://github.com/Cobblecat/The-Lens/blob/main/Data%20Flow.png)
+
+Capture, input ownership, cancellation, and the visible overlay remain local to the workstation. The Special Agent handles finite conversational turns through its private backend session. No extra hosting layer is required for the current single workstation design.
+
 ## Campaign continuity with bounded authority
 
 The Special Agent can maintain campaign continuity, but it cannot freely edit the knowledge system. Lens exposes only three guarded operations:
@@ -86,12 +74,6 @@ The Special Agent can maintain campaign continuity, but it cannot freely edit th
 The canonical factual corpus remains read only. Confirmed campaign updates use an event first transaction, deterministic state rebuild, replay verification, and retained evidence from before and after the change. Tool identity, arguments, results, ledger fingerprints, and attributed events are captured with the originating turn.
 
 This boundary gives the Special Agent enough authority to remember genuine progress without granting broad write access to the reference database or application source.
-
-## Request flow
-
-![The Lens data flow](https://github.com/Cobblecat/The-Lens/blob/main/Data%20Flow.png)
-
-Capture, input ownership, cancellation, and the visible overlay remain local to the workstation. The Special Agent handles finite conversational turns through its private backend session. No extra hosting layer is required for the current single workstation design.
 
 ## Using Independent Lens
 
@@ -112,12 +94,6 @@ This is the primary development route.
 The text bar clears only after the request has been safely recorded and any requested screenshot succeeds. Pressing Escape returns keyboard focus to the game while preserving an unfinished draft.
 
 Independent Lens maintains its own conversation. Requests and replies are not forwarded to whichever conversation happens to be visible in the desktop application. Quitting Lens closes its backend and speech helper while preserving the completed session archive.
-
-## Desktop paired route
-
-The original desktop paired route remains available through **Launch Lens.vbs**. It binds a Lens record queue to a deliberately selected desktop task and preserves the same ordered photo, text, and reply records. This route is retained for compatibility and development comparison; **Launch Independent Lens.vbs** starts the self contained Special Agent instead.
-
-Pairing does not switch modes. To change routes, quit Lens and open the appropriate launcher. An existing draft or uncertain request should be reviewed before changing sessions.
 
 ## Overlay and presentation
 
