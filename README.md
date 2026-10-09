@@ -89,6 +89,8 @@ This boundary gives the Special Agent enough authority to remember genuine progr
 
 ## Request flow
 
+![The Lens data flow](https://github.com/Cobblecat/The-Lens/blob/main/Data%20Flow.png)
+
 ~~~text
 Player input or Manual Look
             ↓
