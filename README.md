@@ -91,22 +91,6 @@ This boundary gives the Special Agent enough authority to remember genuine progr
 
 ![The Lens data flow](https://github.com/Cobblecat/The-Lens/blob/main/Data%20Flow.png)
 
-~~~text
-Player input or Manual Look
-            ↓
-Local capture and request coordinator
-            ↓
-Ordered, durable session record
-            ↓
-Lens owned Special Agent session
-            ↓
-Targeted knowledge retrieval or guarded campaign tool
-            ↓
-Complete response and evidence receipt
-            ↓
-In game overlay
-~~~
-
 Capture, input ownership, cancellation, and the visible overlay remain local to the workstation. The Special Agent handles finite conversational turns through its private backend session. No extra hosting layer is required for the current single workstation design.
 
 ## Using Independent Lens
